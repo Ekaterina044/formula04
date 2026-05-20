@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оформление заказа - Формула здоровья</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="responsive.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .checkout-page { padding: 30px 0 60px; min-height: 100vh; }
+        .page-title { font-size: 32px; font-weight: 800; color: #46211A; margin-bottom: 30px; }
+        .checkout-container { display: grid; grid-template-columns: 1fr 400px; gap: 40px; }
+        .checkout-form { background: white; border-radius: 24px; padding: 30px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-weight: 600; color: #46211A; margin-bottom: 8px; }
+        .form-group input, .form-group textarea { width: 100%; padding: 12px; border: 1px solid #e8ddd7; border-radius: 12px; font-family: inherit; }
+        .form-group input:focus { outline: none; border-color: #64b61a; }
+        .checkout-summary { background: white; border-radius: 24px; padding: 25px; position: sticky; top: 180px; height: fit-content; }
+        .order-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #e8ddd7; }
+        .total-row { display: flex; justify-content: space-between; font-size: 20px; font-weight: 800; margin-top: 15px; padding-top: 15px; border-top: 2px solid #64b61a; }
+        .info-note { background: #f9f6f3; padding: 15px; border-radius: 12px; margin-top: 15px; font-size: 14px; color: #693D3D; }
+        .empty-cart { text-align: center; padding: 60px; background: white; border-radius: 24px; }
+        @media (max-width: 992px) { .checkout-container { grid-template-columns: 1fr; } .checkout-summary { position: static; margin-top: 30px; } }
+        @media (max-width: 768px) { .checkout-page { padding: 100px 0 40px; } }
+    </style>
+</head>
+<body>
+
+<div id="header-placeholder"></div>
+
+<main class="checkout-page">
+    <div class="container">
+        <h1 class="page-title">Оформление заказа</h1>
+        <div id="checkoutContent"></div>
+    </div>
+</main>
+
+<div id="footer-placeholder"></div>
+
+<script src="script.js"></script>
+<script>
+    // Проверка авторизации
+    if (!currentUser) {
+        window.location.href = 'login.html';
+    }
+    
+    // Функция отображения страницы оформления
+    function renderCheckoutPage() {
+        const container = document.getElementById('checkoutContent');
+        if (!container) return;
+        
+        // Получаем актуальную корзину
+        let currentCart = [];
+        if (currentUser && currentUser.email) {
+            const savedCart = localStorage.getItem(`cart_${currentUser.email}`);
+            currentCart = savedCart ? JSON.parse(savedCart) : [];
+        }
+        
+        // Если корзина пуста - показываем сообщение
+        if (!currentCart.length) {
+            container.innerHTML = `
+                <div class="empty-cart">
+                    <i class="fas fa-shopping-cart" style="font-size:80px;color:#e0d6d0;margin-bottom:20px;"></i>
+                    <p>Ваша корзина пуста</p>
+                    <a href="cabinet.html" class="btn-back">Вернуться к покупкам</a>
+                </div>
+            `;
+            return;
+        }
+        
+        // Рассчитываем итоговую сумму
+        let total = 0;
+        const orderItemsHtml = currentCart.map(item => {
+            const qty = item.quantity || 1;
+            const subtotal = item.price * qty;
+            total += subtotal;
+            return `
+                <div class="order-item">
+                    <span>${escapeHtml(item.name)} × ${qty}</span>
+                    <span>${subtotal.toLocaleString()} ₽</span>
+                </div>
+            `;
+        }).join('');
+        
+        // Заполняем данные пользователя если они есть
+        const userName = currentUser.name || '';
+        const userEmail = currentUser.email || '';
+        const userPhone = currentUser.phone || '';
+        
+        container.innerHTML = `
+            <div class="checkout-container">
+                <div class="checkout-form">
+                    <h3 style="margin-bottom: 20px;">Контактные данные</h3>
+                    <div class="form-group">
+                        <label>ФИО *</label>
+                        <input type="text" id="fullName" placeholder="Иванов Иван Иванович" value="${escapeHtml(userName)}">
+                    </div>
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" id="email" placeholder="example@mail.com" value="${escapeHtml(userEmail)}">
+                    </div>
+                    <div class="form-group">
+                        <label>Телефон *</label>
+                        <input type="tel" id="phone" placeholder="+7 (___) ___-__-__" value="${escapeHtml(userPhone)}">
+                    </div>
+                    <div class="form-group">
+                        <label>Адрес доставки *</label>
+                        <input type="text" id="address" placeholder="Город, улица, дом, квартира">
+                    </div>
+                    <div class="form-group">
+                        <label>Комментарий к заказу</label>
+                        <textarea id="comment" rows="3" placeholder="Пожелания по доставке..."></textarea>
+                    </div>
+                </div>
+                
+                <div class="checkout-summary">
+                    <h3 style="margin-bottom: 15px;">Ваш заказ</h3>
+                    ${orderItemsHtml}
+                    <div class="total-row">
+                        <span>Итого к оплате:</span>
+                        <span id="orderTotal">${total.toLocaleString()} ₽</span>
+                    </div>
+                    <div class="info-note">
+                        <i class="fas fa-truck"></i> Доставка осуществляется в течение 1-3 дней<br>
+                        <i class="fas fa-credit-card"></i> Оплата при получении (наличные/карта)
+                    </div>
+                    <button class="pay-btn" id="submitOrderBtn">Оформить заказ</button>
+                </div>
+            </div>
+        `;
+        
+        // Добавляем обработчик кнопки оформления
+        const submitBtn = document.getElementById('submitOrderBtn');
+        if (submitBtn) {
+            submitBtn.addEventListener('click', () => submitOrder(currentCart, total));
+        }
+    }
+    
+    // Функция оформления заказа
+    function submitOrder(cartItems, total) {
+        const fullName = document.getElementById('fullName')?.value.trim();
+        const email = document.getElementById('email')?.value.trim();
+        const phone = document.getElementById('phone')?.value.trim();
+        const address = document.getElementById('address')?.value.trim();
+        const comment = document.getElementById('comment')?.value.trim() || '';
+        
+        // Проверка заполнения обязательных полей
+        if (!fullName || !email || !phone || !address) {
+            alert('Пожалуйста, заполните все обязательные поля');
+            return;
+        }
+        
+        // Проверка email
+        if (!email.includes('@') || !email.includes('.')) {
+            alert('Введите корректный email адрес');
+            return;
+        }
+        
+        // Создаем заказ
+        const order = {
+            orderId: 'ORD-' + Date.now(),
+            date: new Date().toLocaleString('ru-RU'),
+            customer: { fullName, email, phone, address, comment },
+            items: cartItems.map(item => ({ 
+                id: item.id,
+                name: item.name, 
+                price: item.price, 
+                quantity: item.quantity || 1, 
+                total: (item.price * (item.quantity || 1)) 
+            })),
+            total: total,
+            status: 'Новый'
+        };
+        
+        // Сохраняем заказ в историю
+        const ordersKey = `orders_${currentUser.email}`;
+        const existingOrders = JSON.parse(localStorage.getItem(ordersKey) || '[]');
+        existingOrders.push(order);
+        localStorage.setItem(ordersKey, JSON.stringify(existingOrders));
+        
+        // Очищаем корзину
+        localStorage.removeItem(`cart_${currentUser.email}`);
+        
+        // Обновляем глобальную переменную cart
+        cart = [];
+        updateCartBadge();
+        
+        // Показываем сообщение об успехе
+        alert(`✅ Заказ №${order.orderId} успешно оформлен!\n\nСостав заказа:\n${cartItems.map(i => `${i.name} × ${i.quantity || 1} = ${((i.price) * (i.quantity || 1)).toLocaleString()} ₽`).join('\n')}\n\nИтого: ${total.toLocaleString()} ₽\n\nСпособ оплаты: Наличными при получении\nАдрес доставки: ${address}\n\nПодтверждение отправлено на ${email}`);
+        
+        // Перенаправляем в кабинет
+        window.location.href = 'cabinet.html';
+    }
+    
+    // Загружаем страницу при загрузке
+    document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+            renderCheckoutPage();
+        }, 100);
+    });
+</script>
+</body>
+</html>

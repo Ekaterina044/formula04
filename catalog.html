@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Каталог - Формула здоровья</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="responsive.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Frank Ruhl Libre', 'Inter', sans-serif; background: #f5f0ed; }
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+        
+        .header-top-white { position: fixed; top: 0; left: 0; right: 0; z-index: 1030; background: white; border-bottom: 1px solid #e8ecef; }
+        .header-top-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; }
+        .logo-link { display: flex; align-items: center; gap: 15px; text-decoration: none; }
+        .logo-img { height: 70px; }
+        .logo-text-gradient { font-size: 24px; font-weight: 800; background: linear-gradient(135deg, #64b61a, #e8be52); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .auth-link-white { color: #46211A; text-decoration: none; padding: 8px 16px; border-radius: 40px; }
+        
+        .header-bottom-green { position: fixed; top: 94px; left: 0; right: 0; z-index: 1020; background-image: url('fon.png'); background-size: cover; }
+        .header-bottom-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; flex-wrap: wrap; }
+        .nav-menu { display: flex; gap: 16px; flex-wrap: wrap; }
+        .nav-link-green { color: white !important; text-decoration: none; font-weight: 600; padding: 10px 20px; border-radius: 40px; }
+        
+        .action-icons { display: flex; gap: 15px; align-items: center; }
+        .action-icon { background: rgba(255,255,255,0.15); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; position: relative; text-decoration: none; }
+        .badge-count { position: absolute; top: -5px; right: -5px; background: #e8be52; color: #46211A; font-size: 10px; border-radius: 50%; padding: 2px 6px; }
+        .profile-wrapper { position: relative; }
+        .profile-dropdown { position: absolute; top: 100%; right: 0; width: 220px; background: white; border-radius: 16px; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: all 0.3s; z-index: 1000; }
+        .profile-wrapper.active .profile-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+        .dropdown-item-custom { display: flex; align-items: center; gap: 12px; padding: 12px 16px; color: #46211A; text-decoration: none; border-bottom: 1px solid #e8ddd7; }
+        
+        .header-spacer { height: 156px; }
+        
+        .catalog-page { padding: 30px 0 60px; }
+        .page-title { font-size: 32px; font-weight: 800; color: #46211A; margin-bottom: 30px; }
+        .category-filters { display: flex; gap: 15px; margin-bottom: 30px; flex-wrap: wrap; }
+        .filter-btn { background: white; border: 1px solid #e8ddd7; padding: 10px 24px; border-radius: 50px; cursor: pointer; font-weight: 500; transition: 0.2s; }
+        .filter-btn.active { background: #64b61a; color: white; border-color: #64b61a; }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
+        .product-card { background: white; border-radius: 20px; overflow: hidden; position: relative; }
+        .product-fav-btn { position: absolute; top: 15px; right: 15px; background: white; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; z-index: 2; }
+        .product-fav-btn.active { color: #e74c3c; }
+        .product-img { height: 220px; display: flex; align-items: center; justify-content: center; background: #f9f6f3; padding: 20px; }
+        .product-img img { max-width: 100%; max-height: 180px; object-fit: contain; }
+        .product-info { padding: 20px; }
+        .product-title { font-size: 18px; font-weight: 700; color: #46211A; }
+        .product-price { font-size: 22px; font-weight: 800; color: #64b61a; margin: 10px 0; }
+        .product-actions { display: flex; gap: 10px; }
+        .btn-cart { flex: 1; background: #64b61a; color: white; border: none; padding: 10px; border-radius: 30px; cursor: pointer; }
+        .btn-detail { flex: 1; background: #46211A; color: white; text-decoration: none; text-align: center; padding: 10px; border-radius: 30px; display: inline-block; }
+        
+        @media (max-width: 768px) { .header-spacer { height: 140px; } }
+    </style>
+</head>
+<body>
+
+<div class="header-top-white">
+    <div class="container">
+        <div class="header-top-row">
+            <div class="logo-col"><a href="index.html" class="logo-link"><img src="logo.png" class="logo-img"><span class="logo-text-gradient">Формула здоровья</span></a></div>
+            <div class="auth-col" id="authButtons"><a href="login.html" class="auth-link-white">Регистрация</a><a href="login.html" class="auth-link-white">Вход</a></div>
+        </div>
+    </div>
+</div>
+
+<div class="header-bottom-green">
+    <div class="container">
+        <div class="header-bottom-row">
+            <nav class="nav-menu">
+                <a href="catalog.html" class="nav-link-green">Каталог</a>
+                <a href="presentations.html" class="nav-link-green">Презентации</a>
+                <a href="delivery.html" class="nav-link-green">Оплата и доставка</a>
+                <a href="faq.html" class="nav-link-green">FAQ</a>
+            </nav>
+            <div class="action-icons" id="actionIcons">
+                <a href="favorites.html" class="action-icon"><i class="far fa-heart"></i><span class="badge-count" id="favoritesCount">0</span></a>
+                <a href="cart.html" class="action-icon"><i class="fas fa-shopping-cart"></i><span class="badge-count" id="cartCount">0</span></a>
+                <div class="profile-wrapper" id="profileWrapper"><button class="action-icon" id="profileBtn"><i class="far fa-user"></i></button><div class="profile-dropdown"><a href="profile.html" class="dropdown-item-custom">Мой профиль</a><a href="change-password.html" class="dropdown-item-custom">Сменить пароль</a><a href="#" class="dropdown-item-custom" id="logoutBtn">Выйти</a></div></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="header-spacer"></div>
+
+<main class="catalog-page">
+    <div class="container">
+        <h1 class="page-title">Каталог товаров</h1>
+        <div class="category-filters">
+            <button class="filter-btn active" data-cat="all">Все</button>
+            <button class="filter-btn" data-cat="Здоровье">Здоровье</button>
+            <button class="filter-btn" data-cat="Красота">Красота</button>
+            <button class="filter-btn" data-cat="Приборы">Приборы/Аксессуары</button>
+        </div>
+        <div class="products-grid" id="catalogGrid"></div>
+    </div>
+</main>
+
+<script>
+    const productsData = [
+        { id: "effector", name: "VERUM EFFECTOR", category: "Здоровье", price: 3910, desc: "Биомодулятор для омоложения клеток", image: "images/effector.png" },
+        { id: "defender", name: "VERUM DEFENDER", category: "Здоровье", price: 1790, desc: "Защита иммунитета", image: "images/defender.png" },
+        { id: "chlorophyll", name: "VERUM Chlorophyll Ferrum", category: "Здоровье", price: 2750, desc: "Хлорофилл с железом", image: "images/chlorophyll.png" },
+        { id: "foherb", name: "Капсулы Линчжи Фохоу", category: "Здоровье", price: 2500, desc: "Для улучшения самочувствия", image: "images/Фохоу.png" },
+        { id: "daycream", name: "Jenel Day Cream", category: "Красота", price: 2350, desc: "Дневной крем", image: "images/Day Cream.png" },
+        { id: "o2tonic", name: "Jenel O2 tonic", category: "Красота", price: 1100, desc: "Увлажняющий тоник", image: "images/O2 tonic.png" },
+        { id: "aloevera", name: "Гель алоэ вера", category: "Красота", price: 1900, desc: "Увлажняющий гель", image: "images/алоэ вера.png" },
+        { id: "fundesee", name: "FUNDESEE", category: "Красота", price: 12500, desc: "Корейская космецевтика", image: "images/fundesee.png" },
+        { id: "insoles", name: "HEALTH PRIORITY Стельки", category: "Приборы", price: 11500, desc: "Стельки с анионами", image: "images/стельки.png" },
+        { id: "massager", name: "Массажёр Magic Foherb", category: "Приборы", price: 65000, desc: "Профессиональный массажёр", image: "images/Массажёр Magic Foherb.png" }
+    ];
+
+    let currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+    let cart = JSON.parse(localStorage.getItem(`cart_${currentUser?.email || 'guest'}`)) || [];
+    let favorites = JSON.parse(localStorage.getItem(`fav_${currentUser?.email || 'guest'}`)) || [];
+
+    function updateCounters() {
+        document.getElementById('cartCount').innerText = cart.length;
+        document.getElementById('favoritesCount').innerText = favorites.length;
+    }
+
+    function saveCart() { localStorage.setItem(`cart_${currentUser?.email || 'guest'}`, JSON.stringify(cart)); updateCounters(); }
+    function saveFavorites() { localStorage.setItem(`fav_${currentUser?.email || 'guest'}`, JSON.stringify(favorites)); updateCounters(); }
+
+    function addToCart(product) {
+        if (!currentUser) { window.location.href = 'login.html'; return; }
+        if (!cart.find(i => i.id === product.id)) {
+            cart.push({ ...product, quantity: 1 });
+            saveCart();
+            alert(`${product.name} добавлен в корзину`);
+        } else { alert("Товар уже в корзине"); }
+    }
+
+    function toggleFavorite(productId) {
+        if (!currentUser) { window.location.href = 'login.html'; return; }
+        const index = favorites.findIndex(f => f.id === productId);
+        if (index === -1) {
+            const product = productsData.find(p => p.id === productId);
+            favorites.push(product);
+        } else { favorites.splice(index, 1); }
+        saveFavorites();
+        renderCatalog('all');
+    }
+
+    function renderCatalog(category) {
+        const grid = document.getElementById('catalogGrid');
+        let filtered = category === 'all' ? productsData : productsData.filter(p => p.category === category);
+        grid.innerHTML = filtered.map(product => {
+            const isFav = favorites.some(f => f.id === product.id);
+            return `
+                <div class="product-card">
+                    <button class="product-fav-btn ${isFav ? 'active' : ''}" data-id="${product.id}"><i class="fa-${isFav ? 'solid' : 'regular'} fa-heart"></i></button>
+                    <div class="product-img"><img src="${product.image}" onerror="this.src='https://placehold.co/200x180/f9f6f3/693D3D?text=📦'"></div>
+                    <div class="product-info">
+                        <div class="product-title">${product.name}</div>
+                        <div class="product-price">${product.price.toLocaleString()} ₽</div>
+                        <div class="product-actions">
+                            <button class="btn-cart" data-id="${product.id}"><i class="fas fa-shopping-cart"></i> В корзину</button>
+                            <a href="product-detail.html?id=${product.id}" class="btn-detail">Подробнее</a>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+        
+        document.querySelectorAll('.product-fav-btn').forEach(btn => {
+            btn.addEventListener('click', () => toggleFavorite(btn.dataset.id));
+        });
+        document.querySelectorAll('.btn-cart').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const product = productsData.find(p => p.id === btn.dataset.id);
+                if (product) addToCart(product);
+            });
+        });
+    }
+
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderCatalog(btn.dataset.cat);
+        });
+    });
+
+    function updateUIForUser() {
+        const authButtons = document.getElementById('authButtons');
+        const actionIcons = document.getElementById('actionIcons');
+        if (currentUser) {
+            if (authButtons) authButtons.style.display = 'none';
+            if (actionIcons) actionIcons.style.display = 'flex';
+        } else {
+            if (authButtons) authButtons.style.display = 'flex';
+            if (actionIcons) actionIcons.style.display = 'none';
+        }
+        updateCounters();
+    }
+
+    function logout() { sessionStorage.removeItem('currentUser'); window.location.href = 'index.html'; }
+    
+    const profileWrapper = document.getElementById('profileWrapper');
+    const profileBtn = document.getElementById('profileBtn');
+    if (profileBtn) {
+        profileBtn.addEventListener('click', (e) => { e.stopPropagation(); profileWrapper.classList.toggle('active'); });
+        document.addEventListener('click', () => profileWrapper?.classList.remove('active'));
+    }
+    document.getElementById('logoutBtn')?.addEventListener('click', (e) => { e.preventDefault(); logout(); });
+    
+    renderCatalog('all');
+    updateUIForUser();
+</script>
+</body>
+</html>
