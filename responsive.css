@@ -1143,6 +1143,17 @@
         margin-top: 60px !important;
     }
 }
+.header-spacer-only-mobile {
+        height: 0 !important;
+    }
+
+    .hero-video {
+        margin-top: -80px !important;
+    }
+
+    .video-wrapper {
+        margin-top: -80px !important;
+    }
 
 
 /* Для мобильных - навигация flex-контейнер с вертикальным направлением */
