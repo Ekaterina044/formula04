@@ -1073,8 +1073,14 @@
     }
 
     /* Смещаем страницу "Наши каналы" */
-    .channels-page {
+    .channels-page,
+    .page-content,
+    main {
         padding-top: 100px !important;
+    }
+
+    .channels-grid {
+        margin-top: 60px !important;
     }
 
     /* Смещаем страницу "Статьи" */
