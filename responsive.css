@@ -1052,7 +1052,89 @@
     .about-main1-image {
         margin-top: 10px;
     }
+
+    /* Смещаем блок истории вниз */
+    .history-page {
+        padding-top: 50px !important;
+    }
+    
+    .history-section:first-child {
+        margin-top: 40px !important;
+    }
+    
+    /* Или если нужно сместить первый заголовок */
+    .history-title:first-of-type {
+        margin-top: 50px !important;
+    }
+
+    /* Смещаем страницу презентаций */
+    .presentations-page {
+        padding-top: 100px !important;
+    }
+
+    /* Смещаем страницу "Наши каналы" */
+    .channels-page {
+        padding-top: 50px !important;
+    }
+
+    /* Смещаем страницу "Статьи" */
+     .header-spacer-only-mobile {
+        height: 10px !important;
+    }
+
+    /* Карточка товара */
+    .product-card {
+        border-radius: 12px;
+        margin-bottom: 10px;
+    }
+    
+    /* Блок с картинкой */
+    .product-image {
+        height: 100px !important;
+        padding: 10px;
+    }
+    
+    /* Исправляем обрезание карточек */
+.products-grid {
+    gap: 10px !important;
+    padding: 0 5px !important;
 }
+
+.product-card {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.product-info {
+    padding: 8px !important;
+}
+
+.product-info h3 {
+    font-size: 11px !important;
+    word-break: break-word;
+    white-space: normal;
+}
+
+.product-price {
+    font-size: 12px !important;
+}
+
+.product-actions {
+    gap: 4px !important;
+}
+
+.btn-more {
+    padding: 4px 6px !important;
+    font-size: 9px !important;
+}
+
+.btn-cart-icon {
+    width: 26px !important;
+    height: 26px !important;
+    font-size: 10px !important;
+}
+}
+
 
 /* Для мобильных - навигация flex-контейнер с вертикальным направлением */
 @media (max-width: 768px) {
@@ -2082,5 +2164,81 @@ body:after {
     .footer-new .footer-copyright p,
     .footer-new .footer-bottom-links a {
         color: #ffffff !important;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Секция популярных товаров */
+    .popular-products-section {
+        padding: 20px 0;
+    }
+    
+    /* Заголовок */
+    .section-title {
+        font-size: 22px !important;
+        margin-bottom: 20px !important;
+    }
+    
+    /* Сетка популярных товаров */
+    .popular-slider .swiper-wrapper {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 10px !important;
+        transform: none !important;
+    }
+    
+    .popular-slider .swiper-slide {
+        width: auto !important;
+        margin: 0 !important;
+        height: auto !important;
+    }
+    
+    /* Карточка популярного товара */
+    .popular-card {
+        margin: 0;
+        border-radius: 12px;
+    }
+    
+    /* Картинка */
+    .popular-img {
+        height: 100px !important;
+        padding: 8px;
+    }
+    
+    .popular-img img {
+        max-height: 70px !important;
+        max-width: 80px;
+    }
+    
+    /* Название */
+    .popular-info h3 {
+        font-size: 11px !important;
+        margin-bottom: 5px;
+        line-height: 1.3;
+    }
+    
+    /* Цена */
+    .popular-price {
+        font-size: 13px !important;
+        margin-bottom: 8px;
+    }
+    
+    /* Кнопки */
+    .popular-actions {
+        gap: 5px;
+        flex-wrap: wrap;
+    }
+    
+    .btn-popular-detail,
+    .btn-popular-cart {
+        padding: 4px 6px !important;
+        font-size: 9px !important;
+        min-height: 26px;
+    }
+    
+    /* Стрелки скрываем */
+    .popular-slider-button-next,
+    .popular-slider-button-prev {
+        display: none !important;
     }
 }
