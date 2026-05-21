@@ -1139,6 +1139,9 @@
     height: 26px !important;
     font-size: 10px !important;
 }
+    .profile-sidebar {
+        margin-top: 60px !important;
+    }
 }
 
 
