@@ -142,18 +142,16 @@ function toggleFavorite(productId) {
     if (typeof window.renderCartContent === 'function') window.renderCartContent();
     if (typeof window.renderFavoritesContent === 'function') window.renderFavoritesContent();
     if (typeof window.renderPopularGoods === 'function') window.renderPopularGoods();
-    if (typeof window.renderProductsGrid === 'function') {
-        document.querySelectorAll('.products-grid').forEach(grid => {
-            const products = allProducts.filter(p => {
-                if (grid.id === 'healthGrid') return p.category === 'health';
-                if (grid.id === 'beautyGrid') return p.category === 'beauty';
-                if (grid.id === 'devicesGrid') return p.category === 'devices';
-                if (grid.id === 'productsGrid') return true;
-                return false;
-            });
-            if (products.length) window.renderProductsGrid(grid.id, products);
-        });
-    }
+        document.querySelectorAll('.product-fav').forEach(btn => {
+            const productId = btn.dataset.id;
+            const isFav = favorites.some(f => f && f.id === productId);
+            const icon = btn.querySelector('i');
+                if (icon) {
+            icon.className = isFav ? 'fa-solid fa-heart' : 'fa-regular fa-heart';
+            if (isFav) btn.classList.add('active');
+            else btn.classList.remove('active');
+        }
+    });
 }
 
 function redirectToLogin() {
