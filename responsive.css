@@ -1025,7 +1025,7 @@
     .btn-cart-icon,
     .btn-popular-cart {
         font-size: 10px !important;
-        padding: 5px 8px !important;
+        padding: 14px 20px !important;
         height: 30px !important;
     }
     
@@ -1130,7 +1130,7 @@
 }
 
 .btn-more {
-    padding: 4px 6px !important;
+    padding: 4px 30px !important;
     font-size: 9px !important;
 }
 
@@ -1141,6 +1141,36 @@
 }
     .profile-sidebar {
         margin-top: 60px !important;
+    }
+
+    /* Кнопка "Редактировать" */
+    #editProfileBtn {
+        margin-bottom: 30px !important;
+        width: 100% !important;
+    }
+    
+    /* Кнопка "Выйти из аккаунта" */
+    #logoutProfileBtn {
+        margin-top: 30px !important;
+        width: 100% !important;
+    }
+    
+    /* Если кнопки в одной колонке */
+    .profile-tab-pane .btn-primary-custom,
+    .profile-tab-pane .btn-danger-custom {
+        display: block !important;
+        width: 100% !important;
+        text-align: center !important;
+    }
+    
+    /* Отступ между кнопками в форме редактирования */
+    .form-buttons {
+        flex-direction: column !important;
+        gap: 15px !important;
+    }
+    
+    .form-buttons button {
+        width: 100% !important;
     }
 }
 
@@ -2261,5 +2291,44 @@ body:after {
     .popular-slider-button-next,
     .popular-slider-button-prev {
         display: none !important;
+    }
+}
+
+/* ========== ОПТИМИЗАЦИЯ ДЛЯ МЕДЛЕННЫХ СОЕДИНЕНИЙ ========== */
+@media (max-width: 768px) {
+    /* Отключаем тяжелые эффекты */
+    .video-overlay {
+        background: rgba(0, 0, 0, 0.3);
+    }
+    
+    /* Упрощаем градиенты */
+    .header-bottom-green {
+        background-image: url('fon.png');
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+    
+    /* Уменьшаем количество анимаций */
+    .marquee-track-brands {
+        animation-duration: 25s;
+        animation-timing-function: linear;
+    }
+    
+    /* Оптимизация для слайдера */
+    .blog-slideritem .row:hover {
+        transform: none;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+    }
+}
+
+/* Отключаем анимации для пользователей с reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
     }
 }
