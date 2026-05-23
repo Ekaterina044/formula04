@@ -19,20 +19,20 @@
 <main>
     <section class="hero-video">
         <div class="video-wrapper">
-    <!-- Десктопное видео -->
-    <video autoplay muted loop playsinline class="bg-video bg-video-desktop">
-        <source src="video.mp4" type="video/mp4">
-    </video>
-    <!-- Мобильное видео -->
-    <video autoplay muted loop playsinline class="bg-video-mobile" 
-           style="object-fit: fill; width: 100%; height: 100%; position: absolute; top: 0; left: 0;">
-        <source src="video2.mp4" type="video/mp4">
-    </video>
-    <div class="video-overlay"></div>
-    <div class="scroll-mouse">
-        <div class="mouse-wheel"></div>
-    </div>
-</div>
+            <!-- Десктопное видео -->
+            <video fetchpriority="high" autoplay muted loop playsinline class="bg-video bg-video-desktop" preload="none" poster="images/video-poster.jpg">
+                <source src="video.mp4" type="video/mp4">
+            </video>
+            <!-- Мобильное видео -->
+            <video autoplay muted loop playsinline class="bg-video-mobile" preload="none" poster="images/video-poster-mobile.jpg"
+                   style="object-fit: fill; width: 100%; height: 100%; position: absolute; top: 0; left: 0;">
+                <source src="video2.mp4" type="video/mp4">
+            </video>
+            <div class="video-overlay"></div>
+            <div class="scroll-mouse">
+                <div class="mouse-wheel"></div>
+            </div>
+        </div>
         <div class="video-text-container">
             <div class="container">
                 <div class="video-text-content">
@@ -51,7 +51,7 @@
                         <div class="row align-items-center">
                             <div class="col-lg-6">
                                 <div class="blog-slider_img">
-                                    <img src="images/Фохоу.png" alt="Бады">
+                                    <img src="images/Фохоу.png" alt="Бады" loading="lazy">
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -70,7 +70,7 @@
                         <div class="row align-items-center">
                             <div class="col-lg-6">
                                 <div class="blog-slider_img">
-                                    <img src="images/effector.png" alt="Витамины">
+                                    <img src="images/effector.png" alt="Витамины" loading="lazy">
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -89,7 +89,7 @@
                         <div class="row align-items-center">
                             <div class="col-lg-6">
                                 <div class="blog-slider_img">
-                                    <img src="images/O2 tonic.png" alt="Косметика">
+                                    <img src="images/O2 tonic.png" alt="Косметика" loading="lazy">
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -125,72 +125,23 @@
 <section class="brands-marquee-section">
     <div class="marquee-wrapper">
         <div class="marquee-track-brands">
-            <!-- VERUM - ссылка на презентацию Здоровье -->
-            <a href="presentations.html#health" class="marquee-brand-item">
-                <span class="brand-name">VERUM</span>
-            </a>
-            <!-- Jénel - ссылка на презентацию Красота -->
-            <a href="presentations.html#beauty" class="marquee-brand-item">
-                <span class="brand-name">Jénel</span>
-            </a>
-            <!-- FUNDESEE - ссылка на презентацию Красота -->
-            <a href="presentations.html#beauty" class="marquee-brand-item">
-                <span class="brand-name">FUNDESEE</span>
-            </a>
-            <!-- FOHERB - ссылка на презентацию Здоровье -->
-            <a href="presentations.html#health" class="marquee-brand-item">
-                <span class="brand-name">FOHERB</span>
-            </a>
-            <!-- WHIEDA - ссылка на презентацию WHIEDA -->
-            <a href="presentations.html#whieda" class="marquee-brand-item">
-                <span class="brand-name">WHIEDA</span>
-            </a>
-            <a href="presentations.html#whieda" class="marquee-brand-item">
-                <span class="brand-name">ATOMY</span>
-            </a>
-            
-            <!-- Дубликат для бесконечной анимации -->
-            <a href="presentations.html#health" class="marquee-brand-item">
-                <span class="brand-name">VERUM</span>
-            </a>
-            <a href="presentations.html#beauty" class="marquee-brand-item">
-                <span class="brand-name">Jénel</span>
-            </a>
-            <a href="presentations.html#beauty" class="marquee-brand-item">
-                <span class="brand-name">FUNDESEE</span>
-            </a>
-            <a href="presentations.html#health" class="marquee-brand-item">
-                <span class="brand-name">FOHERB</span>
-            </a>
-            <a href="presentations.html#whieda" class="marquee-brand-item">
-                <span class="brand-name">WHIEDA</span>
-            </a>
-            <a href="presentations.html#whieda" class="marquee-brand-item">
-                <span class="brand-name">ATOMY</span>
-            </a>
-            <a href="presentations.html#health" class="marquee-brand-item">
-                <span class="brand-name">VERUM</span>
-            </a>
-            <a href="presentations.html#beauty" class="marquee-brand-item">
-                <span class="brand-name">Jénel</span>
-            </a>
-            <a href="presentations.html#beauty" class="marquee-brand-item">
-                <span class="brand-name">FUNDESEE</span>
-            </a>
-            <a href="presentations.html#health" class="marquee-brand-item">
-                <span class="brand-name">FOHERB</span>
-            </a>
-            <a href="presentations.html#whieda" class="marquee-brand-item">
-                <span class="brand-name">WHIEDA</span>
-            </a>
-            <a href="presentations.html#whieda" class="marquee-brand-item">
-                <span class="brand-name">ATOMY</span>
-            </a>
+            <a href="presentations.html#health" class="marquee-brand-item"><span class="brand-name">VERUM</span></a>
+            <a href="presentations.html#beauty" class="marquee-brand-item"><span class="brand-name">Jénel</span></a>
+            <a href="presentations.html#beauty" class="marquee-brand-item"><span class="brand-name">FUNDESEE</span></a>
+            <a href="presentations.html#health" class="marquee-brand-item"><span class="brand-name">FOHERB</span></a>
+            <a href="presentations.html#whieda" class="marquee-brand-item"><span class="brand-name">WHIEDA</span></a>
+            <a href="presentations.html#whieda" class="marquee-brand-item"><span class="brand-name">ATOMY</span></a>
+            <!-- Дубликаты для анимации -->
+            <a href="presentations.html#health" class="marquee-brand-item"><span class="brand-name">VERUM</span></a>
+            <a href="presentations.html#beauty" class="marquee-brand-item"><span class="brand-name">Jénel</span></a>
+            <a href="presentations.html#beauty" class="marquee-brand-item"><span class="brand-name">FUNDESEE</span></a>
+            <a href="presentations.html#health" class="marquee-brand-item"><span class="brand-name">FOHERB</span></a>
+            <a href="presentations.html#whieda" class="marquee-brand-item"><span class="brand-name">WHIEDA</span></a>
+            <a href="presentations.html#whieda" class="marquee-brand-item"><span class="brand-name">ATOMY</span></a>
         </div>
     </div>
 </section>
 
-<!-- БЛОК О НАС (как в вашем примере) -->
 <section id="aboutus">
     <div class="container aboutusblockpadding">
         <div class="row">
@@ -211,11 +162,8 @@
                 <p>«Формула здоровья» объединяет инновации мировых лидеров в области биотехнологий, здоровья и красоты. Это синтез науки VERUM GLOBAL (Россия), восточных традиций WHIEDA (Китай) и корейского качества Atomy. Наша миссия — сделать передовые разработки доступными для каждого, помогая сохранять активность, молодость и гармонию на долгие годы.</p>
                 <p>Мы представляем продукцию, созданную на основе впРНК, традиционной китайской медицины и принципа «Абсолютное качество по абсолютной цене». Это не просто добавки или косметика — это формула вашей силы и победы над возрастом.</p>
                 <p>Наша главная цель — чтобы инновационные решения в области здоровья и долголетия стали неотъемлемой частью жизни каждого человека.</p>
-                
                 <p><strong>Почему партнеры выбирают нас?</strong> Потому что мы предлагаем не просто продукты, а системный подход к здоровью. Каждый бренд в нашей экосистеме прошел строгий отбор: VERUM с его прорывными биотехнологиями, WHIEDA с тысячелетними знаниями ТКМ и Atomy, доказавший эффективность на глобальном рынке.</p>
-                
                 <p><strong>Ваше здоровье — наша формула успеха.</strong> Мы верим, что качественная профилактика, клеточное восстановление и натуральный уход должны быть доступны каждому. Присоединяйтесь к сообществу людей, которые уже выбрали активное долголетие и уверенность в каждом дне.</p>
-
                 <div class="keywords-buttons">
                     <button type="button" class="rounded-btn1 keyword-btn">Здоровье</button>
                     <button type="button" class="rounded-btn1 keyword-btn">Обновление</button>
@@ -232,37 +180,33 @@
                 </div>
             </div>
             <div class="col-md-6 text-end">
-                <img src="images/main1.png" class="img-fluid about-main1-image" alt="О нас" style="border-radius: 20px;">
+                <img src="images/main1.png" class="img-fluid about-main1-image" alt="О нас" style="border-radius: 20px;" loading="lazy">
             </div>
         </div>
     </div>
 </section>
 
-<!-- БЛОК VERUM SHORT -->
 <section class="verum-short-section">
     <div class="container">
         <h2 class="verum-short-title">Verum Short</h2>
-        
         <div class="verum-short-grid">
             <div class="short-card">
                 <div class="short-video-wrapper">
-                    <video class="short-video" autoplay loop muted playsinline preload="auto">
+                    <video class="short-video" autoplay loop muted playsinline preload="none" poster="images/video-poster.jpg">
                         <source src="vo1.mp4" type="video/mp4">
                     </video>
                 </div>
             </div>
-            
             <div class="short-card">
                 <div class="short-video-wrapper">
-                    <video class="short-video" autoplay loop muted playsinline preload="auto">
+                    <video class="short-video" autoplay loop muted playsinline preload="none" poster="images/video-poster.jpg">
                         <source src="vo2.mp4" type="video/mp4">
                     </video>
                 </div>
             </div>
-            
             <div class="short-card">
                 <div class="short-video-wrapper">
-                    <video class="short-video" autoplay loop muted playsinline preload="auto">
+                    <video class="short-video" autoplay loop muted playsinline preload="none" poster="images/video-poster.jpg">
                         <source src="vo3.mp4" type="video/mp4">
                     </video>
                 </div>
@@ -298,16 +242,14 @@
                             <i class="fa-${inFav ? 'solid' : 'regular'} fa-heart"></i>
                         </button>
                         <div class="popular-img">
-                            <img src="${product.image}" alt="${product.name}" onerror="this.parentElement.innerHTML='📦'">
+                            <img src="${product.image}" alt="${product.name}" onerror="this.parentElement.innerHTML='📦'" loading="lazy">
                         </div>
                         <div class="popular-info">
                             <h3>${escapeHtml(product.name)}</h3>
                             <div class="popular-price">${product.price.toLocaleString()} ₽</div>
                             <div class="popular-actions">
                                 <a href="product-detail.html?id=${product.id}" class="btn-popular-detail">Подробнее</a>
-                                <button class="btn-popular-cart" data-id="${product.id}">
-                                    В корзину
-                                </button>
+                                <button class="btn-popular-cart" data-id="${product.id}">В корзину</button>
                             </div>
                         </div>
                     </div>
@@ -315,7 +257,6 @@
             `;
         }).join('');
         
-        // Обработчики для сердечек
         container.querySelectorAll('.product-fav').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -323,53 +264,53 @@
             });
         });
         
-        // Обработчики для кнопки "В корзину"
         container.querySelectorAll('.btn-popular-cart:not([disabled])').forEach(btn => {
             btn.addEventListener('click', () => {
                 addToCartById(btn.dataset.id);
             });
         });
         
-        // Обновляем слайдер
         if (popularSwiper) {
             popularSwiper.update();
         }
     }
     
-    // В cabinet.html, замените функцию initPopularSlider на:
-function initPopularSlider() {
-    // На мобильных устройствах не инициализируем Swiper
-    if (window.innerWidth <= 768) {
-        return;
+    function initPopularSlider() {
+        if (window.innerWidth <= 768) {
+            return;
+        }
+        
+        popularSwiper = new Swiper('#popularSlider', {
+            slidesPerView: 1,
+            spaceBetween: 20,
+            navigation: {
+                nextEl: '.popular-slider-button-next',
+                prevEl: '.popular-slider-button-prev',
+            },
+            breakpoints: {
+                480: { slidesPerView: 2 },
+                768: { slidesPerView: 3 },
+                1024: { slidesPerView: 4 }
+            }
+        });
     }
     
-    popularSwiper = new Swiper('#popularSlider', {
-        slidesPerView: 1,
-        spaceBetween: 20,
-        navigation: {
-            nextEl: '.popular-slider-button-next',
-            prevEl: '.popular-slider-button-prev',
-        },
-        breakpoints: {
-            480: { slidesPerView: 2 },
-            768: { slidesPerView: 3 },
-            1024: { slidesPerView: 4 }
+    window.addEventListener('resize', function() {
+        if (window.innerWidth <= 768 && popularSwiper) {
+            popularSwiper.destroy(true, true);
+            popularSwiper = null;
+        } else if (window.innerWidth > 768 && !popularSwiper) {
+            initPopularSlider();
         }
     });
-}
-
-// И добавьте обработчик изменения размера окна
-window.addEventListener('resize', function() {
-    if (window.innerWidth <= 768 && popularSwiper) {
-        popularSwiper.destroy(true, true);
-        popularSwiper = null;
-    } else if (window.innerWidth > 768 && !popularSwiper) {
-        initPopularSlider();
-    }
-});
     
-    // Инициализация главного слайдера
+    // Инициализация главного слайдера с проверкой загрузки Swiper
     function initMainSlider() {
+        if (typeof Swiper === 'undefined') {
+            setTimeout(initMainSlider, 200);
+            return;
+        }
+        
         const sliderSection = document.getElementById('products');
         
         function changeBackgroundColor(index) {
@@ -384,16 +325,16 @@ window.addEventListener('resize', function() {
         }
         
         new Swiper('#productSlider', {
-    effect: 'slide',
-    loop: true,
-    autoplay: { delay: 5000, disableOnInteraction: false },
-    mousewheel: false,   // ← отключаем прокрутку мышью
-    pagination: { el: '.swiper-pagination', clickable: true },
-    on: { 
-        init: function() { changeBackgroundColor(this.realIndex); }, 
-        slideChange: function() { changeBackgroundColor(this.realIndex); } 
-    }
-});
+            effect: 'slide',
+            loop: true,
+            autoplay: { delay: 5000, disableOnInteraction: false },
+            mousewheel: false,
+            pagination: { el: '.swiper-pagination', clickable: true },
+            on: { 
+                init: function() { changeBackgroundColor(this.realIndex); }, 
+                slideChange: function() { changeBackgroundColor(this.realIndex); } 
+            }
+        });
         
         const scrollMouse = document.querySelector('.scroll-mouse');
         if (scrollMouse) {
@@ -403,14 +344,12 @@ window.addEventListener('resize', function() {
         }
     }
     
-    // Запуск при загрузке страницы
     document.addEventListener('DOMContentLoaded', () => {
         initMainSlider();
         renderPopularGoods();
         initPopularSlider();
     });
     
-    // Делаем функцию глобальной для обновления из других мест
     window.renderPopularGoods = renderPopularGoods;
 </script>
 </body>
