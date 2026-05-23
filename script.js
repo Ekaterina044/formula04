@@ -3,6 +3,72 @@ let currentUser = JSON.parse(sessionStorage.getItem('currentUser') || 'null');
 let cart = [];
 let favorites = [];
 
+// ========== ОПТИМИЗАЦИЯ ЗАГРУЗКИ ==========
+// Отложенная загрузка некритических скриптов
+function loadDeferredScripts() {
+    // Загружаем Bootstrap только после полной загрузки страницы
+    if (typeof bootstrap === 'undefined') {
+        const bootstrapLink = document.createElement('link');
+        bootstrapLink.rel = 'stylesheet';
+        bootstrapLink.href = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css';
+        document.head.appendChild(bootstrapLink);
+    }
+    
+    // Загружаем Swiper при необходимости
+    if (document.querySelector('.swiper') && typeof Swiper === 'undefined') {
+        const swiperScript = document.createElement('script');
+        swiperScript.src = 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js';
+        swiperScript.defer = true;
+        document.body.appendChild(swiperScript);
+    }
+}
+
+// Запускаем после загрузки основного контента
+if (window.requestIdleCallback) {
+    requestIdleCallback(loadDeferredScripts);
+} else {
+    setTimeout(loadDeferredScripts, 1000);
+}
+
+// ========== ЛЕНИВАЯ ЗАГРУЗКА ИЗОБРАЖЕНИЙ ==========
+function initLazyLoading() {
+    const images = document.querySelectorAll('img[data-src]');
+    if ('IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.src = img.dataset.src;
+                    img.removeAttribute('data-src');
+                    imageObserver.unobserve(img);
+                }
+            });
+        });
+        images.forEach(img => imageObserver.observe(img));
+    } else {
+        // Fallback
+        images.forEach(img => {
+            img.src = img.dataset.src;
+            img.removeAttribute('data-src');
+        });
+    }
+}
+
+// Запускаем ленивую загрузку
+document.addEventListener('DOMContentLoaded', initLazyLoading);
+
+// ========== УЛУЧШЕННАЯ ЗАГРУЗКА ВИДЕО ==========
+function initOptimizedVideo() {
+    const videos = document.querySelectorAll('video');
+    videos.forEach(video => {
+        video.addEventListener('canplay', () => {
+            video.style.opacity = '1';
+        });
+        video.style.opacity = '0';
+        video.style.transition = 'opacity 0.3s ease';
+    });
+}
+
 // ПОЛНАЯ БАЗА ТОВАРОВ
 const allProducts = [
     // ЗДОРОВЬЕ
@@ -45,7 +111,7 @@ const allProducts = [
     { id: "magic_massager", name: "Массажёр Magic Foherb", category: "devices", price: 65000, desc: "биоэнергетический прибор", image: "images/Массажёр Magic Foherb.png", volume: "1 прибор", subtitle: "Биомассажер Magic", description: "<p>Биоэнергетический прибор для восстановления организма.</p>", composition: "<p>массажер, токопроводящие перчатки, кремы.</p>", properties: "<ul><li>улучшает кровообращение</li><li>снимает усталость</li></ul>", recommendations: "<p>надевать перчатки, смоченные водой.</p>" },
     { id: "ventun", name: "Набор прибора Вэнтун", category: "devices", price: 200000, desc: "физиотерапевтический комплекс", image: "images/Прибор Вэнтун.png", volume: "1 прибор", subtitle: "Прибор Вэнтун 1.0", description: "<p>Сочетает традиционную китайскую медицину и современные технологии.</p>", composition: "<p>основной блок, нагревательный пояс, LED-панель.</p>", properties: "<ul><li>улучшает микроциркуляцию</li><li>повышает тонус</li></ul>", recommendations: "<p>продолжительность процедуры 40 минут.</p>" },
     { id: "insoles", name: "Коррекционные стельки c анионами", category: "devices", price: 11500, desc: "ортопедические изделия", image: "images/стельки.png", volume: "1 пара", subtitle: "Коррекционные стельки", description: "<p>Ортопедические стельки с анионами.</p>", composition: "<p>активированный уголь, ионы серебра.</p>", properties: "<ul><li>улучшает кровообращение в стопах</li><li>антибактериальный эффект</li></ul>", recommendations: "<p>обрезать по размеру, носить в обуви.</p>" },
-    { id: "computer_glasses", name: "Высокотехнологичные компьютерные очки", category: "devices", price: 5500, desc: "защита от излучения", image: "images/Компьютерные очки.png", volume: "1 шт.", subtitle: "Компьютерные очки", description: "<p>Защита от облучения, снятие усталости глаз.</p>", composition: "<p>пластиковая оправа, поликарбонатные линзы с антибликом.</p>", properties: "<ul><li>снижает утомление глаз</li><li>уменьшает головные боли</li></ul>", recommendations: "<p>надевать за 5-10 минут до работы за компьютером.</p>" },
+    { id: "computer_glasses", name: "Высокотехнологичные компьютерные очки", category: "devices", price: 5500, desc: "защита от излучения", image: "images/компьютерные очки.png", volume: "1 шт.", subtitle: "Компьютерные очки", description: "<p>Защита от облучения, снятие усталости глаз.</p>", composition: "<p>пластиковая оправа, поликарбонатные линзы с антибликом.</p>", properties: "<ul><li>снижает утомление глаз</li><li>уменьшает головные боли</li></ul>", recommendations: "<p>надевать за 5-10 минут до работы за компьютером.</p>" },
     { id: "water_resonator", name: "Квантовый низкочастотный резонатор для воды", category: "devices", price: 31100, desc: "резонатор для воды", image: "images/резонатор.png", volume: "кейс 16 упаковок", subtitle: "Резонатор воды", description: "<p>Изменение структуры воды с помощью низкочастотного резонанса.</p>", composition: "<p>молекулярно-резонансный модуль, частота 7,8 Гц.</p>", properties: "<ul><li>улучшает усвоение воды</li><li>нормализует pH-баланс</li></ul>", recommendations: "<p>обрабатывать воду 20 минут.</p>" },
     { id: "hydrogen_rod", name: "Водородный стержень", category: "devices", price: 5000, desc: "насыщение воды водородом", image: "images/стержень.png", volume: "2 шт.", subtitle: "Водородный стержень", description: "<p>Приготовление насыщенной водородом воды в домашних условиях.</p>", composition: "<p>нержавеющая сталь, турмалин, нано-серебро.</p>", properties: "<ul><li>восстанавливает свойства воды</li><li>антиоксидантный эффект</li></ul>", recommendations: "<p>поместить в бутылку с водой на 10-15 минут.</p>" },
     { id: "bagua_sauna", name: "Мини сауна БА-ГУА", category: "devices", price: 68000, desc: "портативная сауна", image: "images/сауна.png", volume: "70×80×95 см", subtitle: "Мини сауна БА-ГУА", description: "<p>Портативная инфракрасная сауна с лечебными камнями.</p>", composition: "<p>камни нефрит и турмалин, стульчик, коврик.</p>", properties: "<ul><li>улучшает микроциркуляцию</li><li>детоксикация</li><li>снятие стресса</li></ul>", recommendations: "<p>перед процедурой выпить воду, продолжительность 20-40 минут.</p>" },
@@ -251,7 +317,7 @@ function loadHeaderAndFooter() {
                     <div class="header-top-row">
                         <div class="logo-col">
                             <a href="${isAuth ? 'cabinet.html' : 'index.html'}" class="logo-link">
-                                <img src="logo.png" alt="Формула здоровья" class="logo-img">
+                                <img src="logo.png" fetchpriority="high" alt="Формула здоровья" class="logo-img">
                                 <span class="logo-text-gradient">Формула здоровья</span>
                             </a>
                         </div>
@@ -415,7 +481,7 @@ function loadHeaderAndFooter() {
                     <div class="footer-content">
                         <div class="footer-brand">
                             <div class="footer-logo-wrapper">
-                                <img src="logo.png" alt="Формула здоровья" class="footer-logo-img-new">
+                                <img src="logo.png" loading="lazy" alt="Формула здоровья" class="footer-logo-img-new">
                                 <span class="footer-brand-name">Формула здоровья</span>
                             </div>
                             <div class="footer-social">
@@ -500,7 +566,7 @@ function renderProductsGrid(containerId, products, options = {}) {
         return `
             <div class="product-card">
                 ${favButton}
-                <div class="product-image"><img src="${product.image}" alt="${product.name}" onerror="this.parentElement.innerHTML='📦'"></div>
+                <div class="product-image"><img src="${product.image}" loading="lazy" alt="${product.name}" onerror="this.parentElement.innerHTML='📦'"></div>
                 <div class="product-info">
                     <h3>${escapeHtml(product.name)}</h3>
                     <div class="product-desc">${escapeHtml(product.desc)}</div>
