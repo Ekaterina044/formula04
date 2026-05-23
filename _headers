@@ -23,4 +23,18 @@
   Cache-Control: max-age=31536000
 
 /.webp
-  Cache-Control: max-age=31536000
+  
+Cache-Control: max-age=31536000
+/.mp4          Cache-Control: max-age=31536000
+
+/.webm         Cache-Control: max-age=31536000
+
+/video.mp4      Cache-Control: max-age=31536000
+
+/video2.mp4     Cache-Control: max-age=31536000
+
+/vo1.mp4        Cache-Control: max-age=31536000
+
+/vo2.mp4        Cache-Control: max-age=31536000
+
+/vo3.mp4        Cache-Control: max-age=31536000
