@@ -528,6 +528,7 @@ function loadHeaderAndFooter() {
                         <div class="footer-bottom-links">
                             <a href="${isAuthForFooter ? 'profile.html' : 'login.html'}">Личный кабинет</a>
                             <a href="privacy.html">Политика конфиденциальности</a>
+                            <a href="cookies.html">Политика cookies</a>
                             <a href="map.html">Наши данные</a>
                         </div>
                     </div>
@@ -2131,4 +2132,193 @@ window.addEventListener('resize', () => {
             }
         }
     }
+});
+
+// ========== COOKIE CONSENT (УВЕДОМЛЕНИЕ О COOKIES) ==========
+function initCookieConsent() {
+    // Проверяем, давал ли пользователь согласие
+    const cookieConsentGiven = localStorage.getItem('cookie_consent');
+    
+    if (cookieConsentGiven === 'accepted' || cookieConsentGiven === 'declined') {
+        return; // Если уже ответил, не показываем
+    }
+    
+    // Создаём блок уведомления
+    const consentDiv = document.createElement('div');
+    consentDiv.className = 'cookie-consent';
+    consentDiv.innerHTML = `
+        <div class="cookie-text">
+            Мы используем cookies для улучшения работы сайта. 
+            Продолжая использовать сайт, вы соглашаетесь с нашей 
+            <a href="cookies.html">политикой обработки cookies</a>.
+        </div>
+        <div class="cookie-buttons">
+            <button class="cookie-accept">Принять</button>
+            <button class="cookie-decline">Отклонить</button>
+        </div>
+    `;
+    
+    document.body.appendChild(consentDiv);
+    
+    // Обработчики кнопок
+    const acceptBtn = consentDiv.querySelector('.cookie-accept');
+    const declineBtn = consentDiv.querySelector('.cookie-decline');
+    
+    acceptBtn.addEventListener('click', () => {
+        localStorage.setItem('cookie_consent', 'accepted');
+        consentDiv.remove();
+        // Здесь можно включить аналитические скрипты (Яндекс.Метрика, Google Analytics)
+        console.log('Cookies приняты');
+    });
+    
+    declineBtn.addEventListener('click', () => {
+        localStorage.setItem('cookie_consent', 'declined');
+        consentDiv.remove();
+        console.log('Cookies отклонены');
+    });
+}
+
+// Запускаем при загрузке страницы
+document.addEventListener('DOMContentLoaded', () => {
+    initCookieConsent();
+});
+
+// ========== ЧАТ ПОДДЕРЖКИ (АВТОМАТИЧЕСКИ НА ВСЕХ СТРАНИЦАХ) ==========
+function initSupportChat() {
+    // Проверяем, есть ли уже чат на странице
+    if (document.querySelector('.support-chat')) return;
+    
+    // Создаём HTML чата
+    const chatHTML = `
+        <div class="support-chat">
+            <div class="chat-icon" id="chatIcon">
+                <i class="fas fa-comment-dots"></i>
+            </div>
+            <div class="chat-window" id="chatWindow">
+                <div class="chat-header">
+                    <span><i class="fas fa-headset"></i> Поддержка</span>
+                    <button id="chatCloseBtn">&times;</button>
+                </div>
+                <div class="chat-messages" id="chatMessages"></div>
+                <div class="chat-input">
+                    <input type="text" id="chatInput" placeholder="Введите сообщение...">
+                    <button id="chatSendBtn"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', chatHTML);
+    
+    const chatIcon = document.getElementById('chatIcon');
+    const chatWindow = document.getElementById('chatWindow');
+    const chatCloseBtn = document.getElementById('chatCloseBtn');
+    const chatInput = document.getElementById('chatInput');
+    const chatSendBtn = document.getElementById('chatSendBtn');
+    const chatMessages = document.getElementById('chatMessages');
+    
+    // Данные пользователя
+    let userName = 'Гость';
+    if (typeof currentUser !== 'undefined' && currentUser) {
+        if (currentUser.name) userName = currentUser.name;
+        else if (currentUser.email) userName = currentUser.email.split('@')[0];
+    }
+    
+    function getCurrentTime() {
+        const now = new Date();
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        return `${hours}:${minutes}`;
+    }
+    
+    function getCurrentDate() {
+        const now = new Date();
+        const day = now.getDate().toString().padStart(2, '0');
+        const month = (now.getMonth() + 1).toString().padStart(2, '0');
+        return `${day}.${month}`;
+    }
+    
+    function addMessage(sender, text, isBot = true, botName = 'Администратор') {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${isBot ? 'bot' : 'user'}`;
+        
+        const timeString = getCurrentTime();
+        const dateString = getCurrentDate();
+        const senderName = isBot ? botName : userName;
+        const senderIcon = isBot ? '🤖' : '👤';
+        
+        messageDiv.innerHTML = `
+            <div class="message-content">
+                <div class="message-info">
+                    <span class="message-name">${senderIcon} ${escapeHtml(senderName)}</span>
+                    <span class="message-time">${dateString} ${timeString}</span>
+                </div>
+                <div class="message-text">${escapeHtml(text)}</div>
+            </div>
+        `;
+        
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+    
+    function addWelcomeMessage() {
+        if (chatMessages.children.length === 0) {
+            const welcomeText = `Здравствуйте${userName !== 'Гость' ? ', ' + escapeHtml(userName) : ''}! Чем могу помочь?`;
+            addMessage('Администратор', welcomeText, true, 'Администратор');
+        }
+    }
+    
+    if (chatIcon) {
+        chatIcon.addEventListener('click', () => {
+            chatWindow.style.display = 'flex';
+            addWelcomeMessage();
+        });
+    }
+    
+    if (chatCloseBtn) {
+        chatCloseBtn.addEventListener('click', () => {
+            chatWindow.style.display = 'none';
+        });
+    }
+    
+    document.addEventListener('click', (e) => {
+        if (chatWindow && chatWindow.style.display === 'flex') {
+            if (!chatWindow.contains(e.target) && !chatIcon.contains(e.target)) {
+                chatWindow.style.display = 'none';
+            }
+        }
+    });
+    
+    function sendMessage() {
+        const message = chatInput.value.trim();
+        if (message === '') return;
+        
+        addMessage(userName, message, false);
+        chatInput.value = '';
+        
+        setTimeout(() => {
+            const botResponses = [
+                'Спасибо за ваше сообщение! Наш специалист ответит вам в ближайшее время.',
+                'Принято! Мы свяжемся с вами в ближайшее время.',
+                'Благодарим за обращение! Чем ещё можем помочь?',
+                'Ваше сообщение отправлено. Ожидайте ответа оператора.'
+            ];
+            const randomResponse = botResponses[Math.floor(Math.random() * botResponses.length)];
+            addMessage('Администратор', randomResponse, true, 'Администратор');
+        }, 800);
+    }
+    
+    if (chatSendBtn) {
+        chatSendBtn.addEventListener('click', sendMessage);
+    }
+    
+    if (chatInput) {
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    initSupportChat();
 });
