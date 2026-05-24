@@ -1,11 +1,16 @@
 -- Дамп базы данных для проекта "Формула здоровья"
--- Создайте базу данных: CREATE DATABASE formula_health CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- Создайте базу данных
+CREATE DATABASE IF NOT EXISTS formula_health CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- Обязательно укажите, какую базу использовать
+USE formula_health;
 
 -- Таблица пользователей
 CREATE TABLE IF NOT EXISTS `users` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(100) NOT NULL,
-  `email` VARCHAR(100) NOT NULL UNIQUE,
+  `email` VARCHAR(100) NOT NULL,
   `password` VARCHAR(255) NOT NULL,
   `phone` VARCHAR(20) DEFAULT NULL,
   `avatar` VARCHAR(255) DEFAULT NULL,
@@ -14,7 +19,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `email` (`email`)
+  UNIQUE KEY `email` (`email`)  -- Уникальный ключ остаётся только здесь
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Таблица товаров
@@ -38,7 +43,7 @@ CREATE TABLE IF NOT EXISTS `products` (
 CREATE TABLE IF NOT EXISTS `orders` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `user_id` INT(11) NOT NULL,
-  `order_number` VARCHAR(50) NOT NULL UNIQUE,
+  `order_number` VARCHAR(50) NOT NULL,
   `total_amount` DECIMAL(10,2) NOT NULL,
   `status` ENUM('pending', 'processing', 'shipped', 'delivered', 'cancelled') DEFAULT 'pending',
   `payment_status` ENUM('pending', 'paid', 'failed', 'refunded') DEFAULT 'pending',
@@ -52,9 +57,14 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `order_number` (`order_number`),
-  KEY `user_id` (`user_id`),
-  FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE
+  KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Добавление внешнего ключа (безопасный способ)
+ALTER TABLE `orders`
+  ADD CONSTRAINT `orders_user_fk`
+  FOREIGN KEY (`user_id`) REFERENCES `users`(`id`)
+  ON DELETE CASCADE;
 
 -- Таблица товаров в заказе
 CREATE TABLE IF NOT EXISTS `order_items` (
