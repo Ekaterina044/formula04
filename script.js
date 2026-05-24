@@ -528,7 +528,6 @@ function loadHeaderAndFooter() {
                         <div class="footer-bottom-links">
                             <a href="${isAuthForFooter ? 'profile.html' : 'login.html'}">Личный кабинет</a>
                             <a href="privacy.html">Политика конфиденциальности</a>
-                            <a href="cookies.html">Политика cookies</a>
                             <a href="map.html">Наши данные</a>
                         </div>
                     </div>
@@ -2148,14 +2147,11 @@ function initCookieConsent() {
     consentDiv.className = 'cookie-consent';
     consentDiv.innerHTML = `
         <div class="cookie-text">
-            Мы используем cookies для улучшения работы сайта. 
-            Продолжая использовать сайт, вы соглашаетесь с нашей 
-            <a href="cookies.html">политикой обработки cookies</a>.
+            Данный веб-сайт использует cookie-файлы в целях предоставления вам лучшего пользовательского опыта на нашем сайте. Продолжая использовать данный сайт, вы соглашаетесь с использованием нами cookie-файлов. Для получения дополнительной информации см.
+            <a href="privacy.html">Политика Cookie.</a>.
         </div>
         <div class="cookie-buttons">
             <button class="cookie-accept">Принять</button>
-            <button class="cookie-decline">Отклонить</button>
-        </div>
     `;
     
     document.body.appendChild(consentDiv);
