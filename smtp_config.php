@@ -38,14 +38,15 @@
 
 // ========== НАСТРОЙКИ SMTP - ИЗМЕНИТЬ ПОД ВАШ ПРОВАЙДЕР ==========
 
-define('SMTP_ENABLED', true);           // Включить SMTP (true/false)
-define('SMTP_HOST', 'smtp.mailtrap.io'); // SMTP сервер
-define('SMTP_PORT', 587);                // Порт SMTP
-define('SMTP_SECURE', 'tls');            // tls или ssl
-define('SMTP_USER', 'your_username');    // Логин SMTP
-define('SMTP_PASS', 'your_password');    // Пароль SMTP
-define('SMTP_FROM_EMAIL', 'no-reply@formula-health.ru'); // Email отправителя
-define('SMTP_FROM_NAME', 'Формула здоровья'); // Имя отправителя
+define('SMTP_ENABLED', true);
+define('SMTP_HOST', 'sandbox.smtp.mailtrap.io');
+define('SMTP_PORT', 587);
+define('SMTP_SECURE', 'tls');
+define('SMTP_USER', '3df771ebc8fdf8');
+define('SMTP_PASS', 'fabarm.1a212');
+define('SMTP_FROM_EMAIL', 'no-reply@formula-health.ru');
+define('SMTP_FROM_NAME', 'Формула здоровья');
+define('ADMIN_EMAIL', 'dylykov.100@mail.ru');
 
 // ========== АДРЕСА ДЛЯ УВЕДОМЛЕНИЙ ==========
 
