@@ -181,8 +181,6 @@ function addToCart(product) {
     if (typeof window.updateCartButtons === 'function') window.updateCartButtons();
     
     updateCartBadge();
-    
-    alert(`${product.name} добавлен в корзину (${existingItem ? existingItem.quantity + 1 : 1} шт.)`);
 }
 
 function addToCartById(productId) {
@@ -2235,27 +2233,27 @@ function initSupportChat() {
     }
     
     function addMessage(sender, text, isBot = true, botName = 'Администратор') {
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `message ${isBot ? 'bot' : 'user'}`;
-        
-        const timeString = getCurrentTime();
-        const dateString = getCurrentDate();
-        const senderName = isBot ? botName : userName;
-        const senderIcon = isBot ? '🤖' : '👤';
-        
-        messageDiv.innerHTML = `
-            <div class="message-content">
-                <div class="message-info">
-                    <span class="message-name">${senderIcon} ${escapeHtml(senderName)}</span>
-                    <span class="message-time">${dateString} ${timeString}</span>
-                </div>
-                <div class="message-text">${escapeHtml(text)}</div>
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${isBot ? 'bot' : 'user'}`;
+    
+    const timeString = getCurrentTime();
+    const dateString = getCurrentDate();
+    const senderName = isBot ? botName : userName;
+    const senderIcon = isBot ? '🤖' : '👤';
+    
+    messageDiv.innerHTML = `
+        <div class="message-content">
+            <div class="message-info">
+                <span class="message-name">${senderIcon} ${escapeHtml(senderName)}</span>
+                <span class="message-time">${dateString} ${timeString}</span>
             </div>
-        `;
-        
-        chatMessages.appendChild(messageDiv);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
+            <div class="message-text">${escapeHtml(text)}</div>
+        </div>
+    `;
+    
+    chatMessages.appendChild(messageDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
     
     function addWelcomeMessage() {
         if (chatMessages.children.length === 0) {
@@ -2312,7 +2310,32 @@ function initSupportChat() {
         chatInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') sendMessage();
         });
+
+    // Функция для отслеживания скролла и поднятия чата над подвалом
+function adjustChatPosition() {
+    const footer = document.querySelector('.footer-new');
+    const chat = document.querySelector('.support-chat');
+    
+    if (!footer || !chat) return;
+    
+    const footerRect = footer.getBoundingClientRect();
+    const chatRect = chat.getBoundingClientRect();
+    
+    // Если подвал виден на экране
+    if (footerRect.top < window.innerHeight) {
+        chat.classList.add('near-footer');
+    } else {
+        chat.classList.remove('near-footer');
     }
+}
+
+// Слушаем скролл
+window.addEventListener('scroll', adjustChatPosition);
+window.addEventListener('resize', adjustChatPosition);
+
+// Запускаем при загрузке
+setTimeout(adjustChatPosition, 100);
+}
 }
 
 document.addEventListener('DOMContentLoaded', () => {
