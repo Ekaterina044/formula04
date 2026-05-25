@@ -2295,7 +2295,7 @@ function initSupportChat() {
                 'Спасибо за ваше сообщение! Оставьте свои контакты, наш специалист свяжеться с вами.',
                 'Благодарю! Ожидайте.'
             ];
-            const randomResponse = botResponses[Math.floor(Math.order() * botResponses.length)];
+            const randomResponse = botResponses[Math.floor(Math.random() * botResponses.length)];
             addMessage('Екатерина', randomResponse, true, 'Екатерина');
         }, 800);
     }
