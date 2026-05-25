@@ -125,7 +125,7 @@
         .form-panel { display: none; }
         .form-panel.active { display: block; }
         
-        /* Стили для модального окна восстановления пароля */
+        /* Стили для панели восстановления пароля */
         .reset-modal {
             display: none;
             position: fixed;
@@ -234,25 +234,30 @@
         }
 
         .forgot-link {
-    margin-top: 12px;
-    font-size: 14px;
-}
+            margin-top: 12px;
+            font-size: 14px;
+        }
 
-.forgot-link span {
-    color: #693D3D;
-}
+        .forgot-link span {
+            color: #693D3D;
+        }
 
-.forgot-link a {
-    color: #64b61a;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    margin-left: 5px;
-    cursor: pointer;
-}
+        .forgot-link a {
+            color: #64b61a;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            margin-left: 5px;
+            cursor: pointer;
+        }
 
-.forgot-link a:hover {
-    color: #4d8e14;
-}
+        .forgot-link a:hover {
+            color: #4d8e14;
+        }
+        
+        .required-star {
+            color: #e74c3c;
+            margin-left: 3px;
+        }
     </style>
 </head>
 <body>
@@ -292,15 +297,27 @@
             <!-- Панель регистрации -->
             <div id="registerPanel" class="form-panel">
                 <form id="registerForm">
-                    <div class="form-group"><label>Имя и фамилия *</label><input type="text" id="regName" placeholder="Иван Иванов" required></div>
-                    <div class="form-group"><label>E-mail *</label><input type="email" id="regEmail" placeholder="example@mail.com" required></div>
-                    <div class="form-group"><label>Пароль (мин. 6 символов) *</label><input type="password" id="regPassword" placeholder="••••••" required></div>
-                    <div class="form-group"><label>Телефон</label><input type="tel" id="regPhone" placeholder="+7 (___) ___-__-__"></div>
+                    <div class="form-group">
+                        <label>Имя и фамилия <span class="required-star">*</span></label>
+                        <input type="text" id="regName" placeholder="Иван Иванов" required>
+                    </div>
+                    <div class="form-group">
+                        <label>E-mail <span class="required-star">*</span></label>
+                        <input type="email" id="regEmail" placeholder="example@mail.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Пароль (мин. 6 символов) <span class="required-star">*</span></label>
+                        <input type="password" id="regPassword" placeholder="••••••" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Телефон <span class="required-star">*</span></label>
+                        <input type="tel" id="regPhone" placeholder="+7 (___) ___-__-__" required>
+                    </div>
                     <button type="submit" class="btn-submit">Зарегистрироваться</button>
                     <div class="forgot-link">
-    <span>Забыли пароль?</span>
-    <a href="#" id="forgotLink">Восстановить</a>
-</div>
+                        <span>Забыли пароль?</span>
+                        <a href="#" id="forgotLink">Восстановить</a>
+                    </div>
                 </form>
             </div>
             
@@ -322,8 +339,8 @@
     
     <script>
         let usersDatabase = JSON.parse(localStorage.getItem('users')) || [
-            { name: "Иван Петров", email: "ivan@test.ru", password: "123456", phone: "" },
-            { name: "Мария Сидорова", email: "maria@test.ru", password: "123456", phone: "" }
+            { name: "Иван Петров", email: "ivan@test.ru", password: "123456", phone: "+7 999 123-45-67" },
+            { name: "Мария Сидорова", email: "maria@test.ru", password: "123456", phone: "+7 999 234-56-78" }
         ];
         
         function saveUsers() { localStorage.setItem('users', JSON.stringify(usersDatabase)); }
@@ -376,9 +393,9 @@
         
         // Кнопки "Восстановить"
         const forgotBtn = document.getElementById('forgotLinkBtn');
-        const forgotBtnReg = document.getElementById('forgotLinkBtnReg');
+        const forgotLink = document.getElementById('forgotLink');
         if (forgotBtn) forgotBtn.addEventListener('click', (e) => { e.preventDefault(); showResetPanel(); });
-        if (forgotBtnReg) forgotBtnReg.addEventListener('click', (e) => { e.preventDefault(); showResetPanel(); });
+        if (forgotLink) forgotLink.addEventListener('click', (e) => { e.preventDefault(); showResetPanel(); });
         
         // Кнопка "Вернуться ко входу"
         const backBtn = document.getElementById('backToLoginBtn');
@@ -424,23 +441,48 @@
             } else { showError('Неверный email или пароль'); }
         };
         
-        // Регистрация
-        document.getElementById('registerForm').onsubmit = (e) => {
-            e.preventDefault();
-            const name = document.getElementById('regName').value;
-            const email = document.getElementById('regEmail').value;
-            const password = document.getElementById('regPassword').value;
-            const phone = document.getElementById('regPhone').value;
-            if (password.length < 6) { showError('Пароль должен быть не менее 6 символов'); return; }
-            if (usersDatabase.find(u => u.email === email)) { showError('Пользователь с таким email уже существует'); return; }
-            const newUser = { name, email, password, phone };
-            usersDatabase.push(newUser);
-            saveUsers();
-            sessionStorage.setItem('currentUser', JSON.stringify(newUser));
-            const returnUrl = sessionStorage.getItem('returnUrl') || 'index.html';
-            sessionStorage.removeItem('returnUrl');
-            window.location.href = returnUrl;
-        };
+        // Регистрация с проверкой всех полей
+document.getElementById('registerForm').onsubmit = (e) => {
+    e.preventDefault();
+    const name = document.getElementById('regName').value.trim();
+    const email = document.getElementById('regEmail').value.trim();
+    const password = document.getElementById('regPassword').value;
+    const phone = document.getElementById('regPhone').value.trim();
+    
+    // Проверка имени
+    if (!name) {
+        showError('Пожалуйста, укажите имя и фамилию');
+        return;
+    }
+    // Проверка email
+    if (!email) {
+        showError('Пожалуйста, укажите email');
+        return;
+    }
+    // Проверка пароля
+    if (password.length < 6) {
+        showError('Пароль должен быть не менее 6 символов');
+        return;
+    }
+    // Проверка телефона (обязательно!)
+    if (!phone) {
+        showError('Пожалуйста, укажите номер телефона');
+        return;
+    }
+    // Проверка на существующего пользователя
+    if (usersDatabase.find(u => u.email === email)) {
+        showError('Пользователь с таким email уже существует');
+        return;
+    }
+    
+    const newUser = { name, email, password, phone };
+    usersDatabase.push(newUser);
+    saveUsers();
+    sessionStorage.setItem('currentUser', JSON.stringify(newUser));
+    const returnUrl = sessionStorage.getItem('returnUrl') || 'index.html';
+    sessionStorage.removeItem('returnUrl');
+    window.location.href = returnUrl;
+};
     </script>
 </body>
 </html>
