@@ -23,6 +23,7 @@
         .total-row { display: flex; justify-content: space-between; font-size: 20px; font-weight: 800; margin-top: 15px; padding-top: 15px; border-top: 2px solid #64b61a; }
         .info-note { background: #f9f6f3; padding: 15px; border-radius: 12px; margin-top: 15px; font-size: 14px; color: #693D3D; }
         .empty-cart { text-align: center; padding: 60px; background: white; border-radius: 24px; }
+        .error-border { border-color: #e74c3c !important; background: #fff5f5; }
         @media (max-width: 992px) { .checkout-container { grid-template-columns: 1fr; } .checkout-summary { position: static; margin-top: 30px; } }
         @media (max-width: 768px) { .checkout-page { padding: 100px 0 40px; } }
     </style>
@@ -140,60 +141,115 @@
     }
     
     // Функция оформления заказа
-    function submitOrder(cartItems, total) {
-        const fullName = document.getElementById('fullName')?.value.trim();
-        const email = document.getElementById('email')?.value.trim();
-        const phone = document.getElementById('phone')?.value.trim();
-        const address = document.getElementById('address')?.value.trim();
-        const comment = document.getElementById('comment')?.value.trim() || '';
-        
-        // Проверка заполнения обязательных полей
-        if (!fullName || !email || !phone || !address) {
-            alert('Пожалуйста, заполните все обязательные поля');
-            return;
-        }
-        
-        // Проверка email
-        if (!email.includes('@') || !email.includes('.')) {
-            alert('Введите корректный email адрес');
-            return;
-        }
-        
-        // Создаем заказ
-        const order = {
-            orderId: 'ORD-' + Date.now(),
-            date: new Date().toLocaleString('ru-RU'),
-            customer: { fullName, email, phone, address, comment },
-            items: cartItems.map(item => ({ 
-                id: item.id,
-                name: item.name, 
-                price: item.price, 
-                quantity: item.quantity || 1, 
-                total: (item.price * (item.quantity || 1)) 
-            })),
-            total: total,
-            status: 'Новый'
-        };
-        
-        // Сохраняем заказ в историю
-        const ordersKey = `orders_${currentUser.email}`;
-        const existingOrders = JSON.parse(localStorage.getItem(ordersKey) || '[]');
-        existingOrders.push(order);
-        localStorage.setItem(ordersKey, JSON.stringify(existingOrders));
-        
-        // Очищаем корзину
-        localStorage.removeItem(`cart_${currentUser.email}`);
-        
-        // Обновляем глобальную переменную cart
-        cart = [];
-        updateCartBadge();
-        
-        // Показываем сообщение об успехе
-        alert(`✅ Заказ №${order.orderId} успешно оформлен!\n\nСостав заказа:\n${cartItems.map(i => `${i.name} × ${i.quantity || 1} = ${((i.price) * (i.quantity || 1)).toLocaleString()} ₽`).join('\n')}\n\nИтого: ${total.toLocaleString()} ₽\n\nСпособ оплаты: Наличными при получении\nАдрес доставки: ${address}\n\nСвами свяжется администратор для подтверждения заказа`);
-        
-        // Перенаправляем в кабинет
-        window.location.href = 'cabinet.html';
+function submitOrder(cartItems, total) {
+    const fullName = document.getElementById('fullName')?.value.trim();
+    const email = document.getElementById('email')?.value.trim();
+    const phone = document.getElementById('phone')?.value.trim();
+    const address = document.getElementById('address')?.value.trim();
+    const comment = document.getElementById('comment')?.value.trim() || '';
+    
+    // Убираем старые сообщения об ошибках
+    document.querySelectorAll('.field-error').forEach(el => el.remove());
+    document.querySelectorAll('.error-border').forEach(el => el.classList.remove('error-border'));
+    
+    let hasError = false;
+    
+    // Проверка ФИО
+    if (!fullName) {
+        showFieldError('fullName', 'Пожалуйста, укажите ФИО');
+        hasError = true;
+    } else if (fullName.length < 2) {
+        showFieldError('fullName', 'ФИО должно содержать минимум 2 символа');
+        hasError = true;
     }
+    
+    // Проверка Email
+    if (!email) {
+        showFieldError('email', 'Пожалуйста, укажите email');
+        hasError = true;
+    } else if (!email.includes('@') || !email.includes('.')) {
+        showFieldError('email', 'Введите корректный email адрес');
+        hasError = true;
+    }
+    
+    // Проверка Телефона
+    if (!phone) {
+        showFieldError('phone', 'Пожалуйста, укажите номер телефона');
+        hasError = true;
+    } else {
+        const phoneDigits = phone.replace(/\D/g, '');
+        if (phoneDigits.length < 10 || phoneDigits.length > 12) {
+            showFieldError('phone', 'Введите корректный номер телефона (10-12 цифр)');
+            hasError = true;
+        }
+    }
+    
+    // Проверка Адреса
+if (!address) {
+    showFieldError('address', 'Пожалуйста, укажите адрес доставки');
+    hasError = true;
+} else if (address.length < 5) {
+    showFieldError('address', 'Укажите полный адрес (город, улица, дом)');
+    hasError = true;
+} else if (!address.match(/[а-яА-ЯёЁa-zA-Z]/)) {
+    showFieldError('address', 'Адрес должен содержать название города и улицы');
+    hasError = true;
+}
+    
+    if (hasError) return;
+    
+    // Создаем заказ
+    const order = {
+        orderId: 'ORD-' + Date.now(),
+        date: new Date().toLocaleString('ru-RU'),
+        customer: { fullName, email, phone, address, comment },
+        items: cartItems.map(item => ({ 
+            id: item.id,
+            name: item.name, 
+            price: item.price, 
+            quantity: item.quantity || 1, 
+            total: (item.price * (item.quantity || 1)) 
+        })),
+        total: total,
+        status: 'Новый'
+    };
+    
+    // Сохраняем заказ в историю
+    const ordersKey = `orders_${currentUser.email}`;
+    const existingOrders = JSON.parse(localStorage.getItem(ordersKey) || '[]');
+    existingOrders.push(order);
+    localStorage.setItem(ordersKey, JSON.stringify(existingOrders));
+    
+    // Очищаем корзину
+    localStorage.removeItem(`cart_${currentUser.email}`);
+    
+    // Обновляем глобальную переменную cart
+    cart = [];
+    updateCartBadge();
+    
+    // Показываем сообщение об успехе
+    alert(`✅ Заказ №${order.orderId} успешно оформлен!\n\nСостав заказа:\n${cartItems.map(i => `${i.name} × ${i.quantity || 1} = ${((i.price) * (i.quantity || 1)).toLocaleString()} ₽`).join('\n')}\n\nИтого: ${total.toLocaleString()} ₽\n\nСпособ оплаты: Наличными при получении\nАдрес доставки: ${address}\n\nС вами свяжется администратор для подтверждения заказа`);
+    
+    // Перенаправляем в кабинет
+    window.location.href = 'cabinet.html';
+}
+
+// Функция показа ошибки под полем
+function showFieldError(fieldId, message) {
+    const field = document.getElementById(fieldId);
+    if (!field) return;
+    
+    field.classList.add('error-border');
+    
+    const existingError = field.parentElement.querySelector('.field-error');
+    if (existingError) existingError.remove();
+    
+    const errorSpan = document.createElement('span');
+    errorSpan.className = 'field-error';
+    errorSpan.style.cssText = 'color: #e74c3c; font-size: 12px; display: block; margin-top: 5px;';
+    errorSpan.textContent = message;
+    field.parentElement.appendChild(errorSpan);
+}
     
     // Загружаем страницу при загрузке
     document.addEventListener('DOMContentLoaded', () => {
