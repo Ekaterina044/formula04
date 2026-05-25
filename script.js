@@ -2257,7 +2257,7 @@ function initSupportChat() {
     
     function addWelcomeMessage() {
         if (chatMessages.children.length === 0) {
-            const welcomeText = `Здравствуйте${userName !== 'Гость' ? ', ' + escapeHtml(userName) : ''}! Чем могу помочь?`;
+            const welcomeText = `Здравствуйте${userName !== 'Гость' ? ', ' + escapeHtml(userName) : ''}! Чем я могу вам помочь?`;
             addMessage('Администратор', welcomeText, true, 'Администратор');
         }
     }
@@ -2292,10 +2292,8 @@ function initSupportChat() {
         
         setTimeout(() => {
             const botResponses = [
-                'Спасибо за ваше сообщение! Наш специалист ответит вам в ближайшее время.',
-                'Принято! Мы свяжемся с вами в ближайшее время.',
-                'Благодарим за обращение! Чем ещё можем помочь?',
-                'Ваше сообщение отправлено. Ожидайте ответа оператора.'
+                'Спасибо за ваше сообщение! Оставьте свои контакты, наш специалист свяжеться с вами.',
+                'Благодарю! Ожидайте.'
             ];
             const randomResponse = botResponses[Math.floor(Math.random() * botResponses.length)];
             addMessage('Администратор', randomResponse, true, 'Администратор');
