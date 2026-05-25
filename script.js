@@ -2232,7 +2232,7 @@ function initSupportChat() {
         return `${day}.${month}`;
     }
     
-    function addMessage(sender, text, isBot = true, botName = 'Администратор') {
+    function addMessage(sender, text, isBot = true, botName = 'Екатерина') {
     const messageDiv = document.createElement('div');
     messageDiv.className = `message ${isBot ? 'bot' : 'user'}`;
     
@@ -2258,7 +2258,7 @@ function initSupportChat() {
     function addWelcomeMessage() {
         if (chatMessages.children.length === 0) {
             const welcomeText = `Здравствуйте${userName !== 'Гость' ? ', ' + escapeHtml(userName) : ''}! Чем я могу вам помочь?`;
-            addMessage('Администратор', welcomeText, true, 'Администратор');
+            addMessage('Екатерина', welcomeText, true, 'Екатерина');
         }
     }
     
@@ -2296,7 +2296,7 @@ function initSupportChat() {
                 'Благодарю! Ожидайте.'
             ];
             const randomResponse = botResponses[Math.floor(Math.random() * botResponses.length)];
-            addMessage('Администратор', randomResponse, true, 'Администратор');
+            addMessage('Екатерина', randomResponse, true, 'Екатерина');
         }, 800);
     }
     
