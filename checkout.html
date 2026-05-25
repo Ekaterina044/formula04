@@ -189,7 +189,7 @@
         updateCartBadge();
         
         // Показываем сообщение об успехе
-        alert(`✅ Заказ №${order.orderId} успешно оформлен!\n\nСостав заказа:\n${cartItems.map(i => `${i.name} × ${i.quantity || 1} = ${((i.price) * (i.quantity || 1)).toLocaleString()} ₽`).join('\n')}\n\nИтого: ${total.toLocaleString()} ₽\n\nСпособ оплаты: Наличными при получении\nАдрес доставки: ${address}\n\nПодтверждение отправлено на ${email}`);
+        alert(`✅ Заказ №${order.orderId} успешно оформлен!\n\nСостав заказа:\n${cartItems.map(i => `${i.name} × ${i.quantity || 1} = ${((i.price) * (i.quantity || 1)).toLocaleString()} ₽`).join('\n')}\n\nИтого: ${total.toLocaleString()} ₽\n\nСпособ оплаты: Наличными при получении\nАдрес доставки: ${address}\n\nСвами свяжется администратор для подтверждения заказа`);
         
         // Перенаправляем в кабинет
         window.location.href = 'cabinet.html';
