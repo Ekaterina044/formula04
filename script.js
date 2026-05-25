@@ -2239,7 +2239,7 @@ function initSupportChat() {
         const timeString = getCurrentTime();
         const dateString = getCurrentDate();
         const senderName = isBot ? botName : userName;
-        const senderIcon = isBot ? '🤖' : '👤';
+        const senderIcon = isBot ? '👱‍♀️' : '👤';
         
         messageDiv.innerHTML = `
             <div class="message-content">
