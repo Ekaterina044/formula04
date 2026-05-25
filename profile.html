@@ -585,41 +585,6 @@
             cancelEdit.addEventListener('click', () => editForm.classList.remove('active'));
         }
         
-        // Смена пароля
-        const changePassBtn = document.getElementById('changePasswordBtn');
-        if (changePassBtn) {
-            changePassBtn.addEventListener('click', () => {
-                const oldPass = document.getElementById('oldPassword').value;
-                const newPass = document.getElementById('newPassword').value;
-                const confirmPass = document.getElementById('confirmPassword').value;
-                
-                if (oldPass !== currentUser.password) {
-                    alert('Неверный текущий пароль');
-                    return;
-                }
-                if (newPass.length < 6) {
-                    alert('Новый пароль должен быть не менее 6 символов');
-                    return;
-                }
-                if (newPass !== confirmPass) {
-                    alert('Пароли не совпадают');
-                    return;
-                }
-                
-                const userIndex = users.findIndex(u => u.email === currentUser.email);
-                if (userIndex !== -1) {
-                    users[userIndex].password = newPass;
-                    localStorage.setItem('users', JSON.stringify(users));
-                    currentUser.password = newPass;
-                    sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
-                    alert('Пароль успешно изменен!');
-                    document.getElementById('oldPassword').value = '';
-                    document.getElementById('newPassword').value = '';
-                    document.getElementById('confirmPassword').value = '';
-                }
-            });
-        }
-        
         // Выход
         const logoutBtn = document.getElementById('logoutProfileBtn');
         if (logoutBtn && typeof window.logout === 'function') {
