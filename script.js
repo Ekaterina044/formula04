@@ -2233,27 +2233,27 @@ function initSupportChat() {
     }
     
     function addMessage(sender, text, isBot = true, botName = 'Екатерина') {
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `message ${isBot ? 'bot' : 'user'}`;
-    
-    const timeString = getCurrentTime();
-    const dateString = getCurrentDate();
-    const senderName = isBot ? botName : userName;
-    const senderIcon = isBot ? '👱‍♀️' : '👤';
-    
-    messageDiv.innerHTML = `
-        <div class="message-content">
-            <div class="message-info">
-                <span class="message-name">${senderIcon} ${escapeHtml(senderName)}</span>
-                <span class="message-time">${dateString} ${timeString}</span>
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${isBot ? 'bot' : 'user'}`;
+        
+        const timeString = getCurrentTime();
+        const dateString = getCurrentDate();
+        const senderName = isBot ? botName : userName;
+        const senderIcon = isBot ? '🤖' : '👤';
+        
+        messageDiv.innerHTML = `
+            <div class="message-content">
+                <div class="message-info">
+                    <span class="message-name">${senderIcon} ${escapeHtml(senderName)}</span>
+                    <span class="message-time">${dateString} ${timeString}</span>
+                </div>
+                <div class="message-text">${escapeHtml(text)}</div>
             </div>
-            <div class="message-text">${escapeHtml(text)}</div>
-        </div>
-    `;
-    
-    chatMessages.appendChild(messageDiv);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-}
+        `;
+        
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
     
     function addWelcomeMessage() {
         if (chatMessages.children.length === 0) {
@@ -2283,6 +2283,9 @@ function initSupportChat() {
         }
     });
     
+    // Счётчик для последовательных ответов бота
+    let botMessageIndex = 0;
+    
     function sendMessage() {
         const message = chatInput.value.trim();
         if (message === '') return;
@@ -2292,11 +2295,13 @@ function initSupportChat() {
         
         setTimeout(() => {
             const botResponses = [
-                'Спасибо за ваше сообщение! Оставьте свои контакты, наш специалист свяжеться с вами.',
-                'Благодарю! Ожидайте.'
+                'Спасибо за ваше сообщение! Оставьте свои контакты, наш специалист свяжется с вами.',
+                'Благодарю! Ожидайте.',
             ];
-            const randomResponse = botResponses[Math.floor(Math.random() * botResponses.length)];
-            addMessage('Екатерина', randomResponse, true, 'Екатерина');
+            
+            const response = botResponses[botMessageIndex % botResponses.length];
+            addMessage('Екатерина', response, true, 'Екатерина');
+            botMessageIndex++;
         }, 800);
     }
     
@@ -2308,32 +2313,27 @@ function initSupportChat() {
         chatInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') sendMessage();
         });
-
-    // Функция для отслеживания скролла и поднятия чата над подвалом
-function adjustChatPosition() {
-    const footer = document.querySelector('.footer-new');
-    const chat = document.querySelector('.support-chat');
-    
-    if (!footer || !chat) return;
-    
-    const footerRect = footer.getBoundingClientRect();
-    const chatRect = chat.getBoundingClientRect();
-    
-    // Если подвал виден на экране
-    if (footerRect.top < window.innerHeight) {
-        chat.classList.add('near-footer');
-    } else {
-        chat.classList.remove('near-footer');
     }
-}
-
-// Слушаем скролл
-window.addEventListener('scroll', adjustChatPosition);
-window.addEventListener('resize', adjustChatPosition);
-
-// Запускаем при загрузке
-setTimeout(adjustChatPosition, 100);
-}
+    
+    // Функция для отслеживания скролла и поднятия чата над подвалом
+    function adjustChatPosition() {
+        const footer = document.querySelector('.footer-new');
+        const chat = document.querySelector('.support-chat');
+        
+        if (!footer || !chat) return;
+        
+        const footerRect = footer.getBoundingClientRect();
+        
+        if (footerRect.top < window.innerHeight) {
+            chat.classList.add('near-footer');
+        } else {
+            chat.classList.remove('near-footer');
+        }
+    }
+    
+    window.addEventListener('scroll', adjustChatPosition);
+    window.addEventListener('resize', adjustChatPosition);
+    setTimeout(adjustChatPosition, 100);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
